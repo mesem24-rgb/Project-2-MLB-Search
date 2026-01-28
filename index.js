@@ -4,17 +4,21 @@ const API_KEY = "e838c38b-4333-40f8-aa9e-58395d9df2e7"; // Replace with your rea
 // ==============================
 // BURGER MENU TOGGLE
 // ==============================
-const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.getElementById("navLinks");
+document.addEventListener("DOMContentLoaded", () => {
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.getElementById("navLinks");
 
-menuBtn.addEventListener("click", () => {
-  navLinks.classList.toggle("active");
-});
+  // If page doesn't have menu, do nothing
+  if (!menuBtn || !navLinks) return;
 
-// Optional: hide menu when a link is clicked
-navLinks.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("active");
+  menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("active");
+    });
   });
 });
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="md-theme-default">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,13 +36,13 @@
         </nav>
     </header>
 
-        <h1><span>MLB Player Search</span></h1>
-        <div class="search-box__wrapper">
-            <div class="search-box">
-                <input id="searchInput" type="text" spellcheck="false" placeholder="Search player name..." />
-                <button id="searchBtn">Ready, Go!</button>
-            </div>
+    <h1><span>MLB Player Search</span></h1>
+    <div class="search-box__wrapper">
+        <div class="search-box">
+            <input id="searchInput" type="text" spellcheck="false" placeholder="Search player name..." />
+            <button id="searchBtn">Ready, Go!</button>
         </div>
+    </div>
     <section id="search">
         <div id="filter" class="content__wrapper">
             <h2 class="search__info">
@@ -67,39 +68,39 @@
         <div id="error" class="error"></div>
     </section>
     <script src="index.js"></script>
-    
-        <script>
-  const wipe = document.getElementById("pageWipe");
 
-  // Page enter (wipe up)
-  window.addEventListener("load", () => {
-    wipe.style.transform = "scaleY(0)";
-  });
+    <script>
+        const wipe = document.getElementById("pageWipe");
 
-  // Intercept internal links
-  document.addEventListener("click", function (e) {
-    const link = e.target.closest("a");
-    if (!link) return;
+        // Page enter (wipe up)
+        window.addEventListener("load", () => {
+            wipe.style.transform = "scaleY(0)";
+        });
 
-    const href = link.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("http")) return;
+        // Intercept internal links
+        document.addEventListener("click", function (e) {
+            const link = e.target.closest("a");
+            if (!link) return;
 
-    e.preventDefault();
-    wipe.classList.add("active");
+            const href = link.getAttribute("href");
+            if (!href || href.startsWith("#") || href.startsWith("http")) return;
 
-    setTimeout(() => {
-      window.location.href = href;
-    }, 600);
-  });
+            e.preventDefault();
+            wipe.classList.add("active");
 
-  // Intercept form submit (search)
-  const form = document.querySelector("form");
-  if (form) {
-    form.addEventListener("submit", () => {
-      wipe.classList.add("active");
-    });
-  }
-</script>
+            setTimeout(() => {
+                window.location.href = href;
+            }, 600);
+        });
+
+        // Intercept form submit (search)
+        const form = document.querySelector("form");
+        if (form) {
+            form.addEventListener("submit", () => {
+                wipe.classList.add("active");
+            });
+        }
+    </script>
 
     </script>
 

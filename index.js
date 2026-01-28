@@ -33,6 +33,9 @@ const loader = document.getElementById("loader");
 const searchQuerySpan = document.getElementById("searchQuery");
 
 // Slider elements
+const sortSlider = document.getElementById("sortSlider");
+const sortLabel = document.getElementById("sortLabel");
+
 const limitSlider = document.getElementById("limitSlider");
 const limitValue = document.getElementById("limitValue");
 
@@ -56,6 +59,16 @@ searchInput.addEventListener("keydown", (e) => {
 limitSlider.addEventListener("input", () => {
   limitValue.textContent = limitSlider.value;
   if (lastResults.length > 0) renderResults(lastResults);
+});
+
+// Sort slider (A–Z / Z–A)
+sortSlider.addEventListener("input", () => {
+  sortLabel.textContent =
+    sortSlider.value === "0" ? "A → Z" : "Z → A";
+
+  if (lastResults.length > 0) {
+    renderResults(lastResults);
+  }
 });
 
 // ==============================
@@ -113,7 +126,19 @@ function renderResults(players) {
   const limit = Number(limitSlider.value);
   if (limit === 0) return;
 
-  players.slice(0, limit).forEach((player) => {
+  let sortedPlayers = [...players];
+
+    // Apply A–Z / Z–A sorting
+  sortedPlayers.sort((a, b) => {
+    const nameA = `${a.last_name} ${a.first_name}`.toLowerCase();
+    const nameB = `${b.last_name} ${b.first_name}`.toLowerCase();
+
+    return sortSlider.value === "0"
+      ? nameA.localeCompare(nameB)
+      : nameB.localeCompare(nameA);
+  });
+
+  sortedPlayers.slice(0, limit).forEach((player) => {
     const card = document.createElement("div");
     card.className = "card";
 

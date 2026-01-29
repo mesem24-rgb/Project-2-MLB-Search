@@ -235,15 +235,23 @@ document.addEventListener("click", (e) => {
 
   const href = link.getAttribute("href");
 
-  // Only intercept internal navigation
-  if (href && !href.startsWith("http") && !href.startsWith("#")) {
-    e.preventDefault();
-    document.body.classList.add("fade-out");
-
-    setTimeout(() => {
-      window.location.href = href;
-    }, 400);
+  // Allow mailto, tel, external, and anchor links
+  if (
+    !href ||
+    href.startsWith("http") ||
+    href.startsWith("#") ||
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:")
+  ) {
+    return;
   }
+
+  e.preventDefault();
+  document.body.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = href;
+  }, 400);
 });
 
 

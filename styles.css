@@ -484,8 +484,14 @@ footer {
   margin: 10px 0;
 }
 
-.footer__social--link,
+.footer__social--link {
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+
 .footer__copyright {
+  text-decoration: none;
   color: white;
   text-align: center;
   margin: 0;

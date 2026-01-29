@@ -50,14 +50,12 @@
                 <span id="searchQuery" class="query__txt"></span>
             </h2>
             <div class="filter">
-                <h3>
-                    <span class="black__txt">Max Results:</span> "20"
-                </h3>
+                
                 <div class="results-controls">
   <!-- Max results -->
   <div class="control">
     <label for="limitSlider">
-      Show results: <span id="limitValue">20</span>
+      Show results (Max): <span id="limitValue">20</span>
     </label>
     <input
       type="range"
@@ -70,20 +68,18 @@
   </div>
 
   <!-- A–Z / Z–A sort -->
-  <div class="control">
-    <label for="sortSlider">
-      Sort:
-      <span id="sortLabel">A → Z</span>
-    </label>
-    <input
-      type="range"
-      id="sortSlider"
-      min="0"
-      max="1"
-      value="0"
-      step="1"
-    />
-  </div>
+  <div class="control sort-toggle">
+  <span class="sort-label">Sort:</span>
+
+  <button
+    type="button"
+    id="sortToggle"
+    class="toggle-btn"
+    aria-pressed="false"
+  >
+    A → Z
+  </button>
+</div>
 </div>
 
             </div>

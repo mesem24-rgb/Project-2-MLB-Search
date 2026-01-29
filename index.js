@@ -1,5 +1,5 @@
-const API_BASE = "https://api.balldontlie.io"
-const API_KEY = "e838c38b-4333-40f8-aa9e-58395d9df2e7"; // Replace with your real key
+const API_BASE = "https://api.balldontlie.io";
+const API_KEY = "e838c38b-4333-40f8-aa9e-58395d9df2e7";
 
 // ==============================
 // BURGER MENU TOGGLE
@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuBtn = document.getElementById("menuBtn");
   const navLinks = document.getElementById("navLinks");
 
-  // If page doesn't have menu, do nothing
   if (!menuBtn || !navLinks) return;
 
   menuBtn.addEventListener("click", () => {
@@ -23,48 +22,53 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==============================
-// SEARCH ELEMENTS
+// ELEMENTS
 // ==============================
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
 const resultsDiv = document.getElementById("results");
 const errorDiv = document.getElementById("error");
 const loader = document.getElementById("loader");
+
+const filterWrapper = document.getElementById("filter");
 const searchQuerySpan = document.getElementById("searchQuery");
 
-// Slider elements
-const sortSlider = document.getElementById("sortSlider");
-const sortLabel = document.getElementById("sortLabel");
-
+// Controls
 const limitSlider = document.getElementById("limitSlider");
 const limitValue = document.getElementById("limitValue");
+const sortToggle = document.getElementById("sortToggle");
 
 // ==============================
 // STATE
 // ==============================
 let lastResults = [];
+let sortDirection = "asc"; // "asc" | "desc"
 
 // ==============================
 // EVENTS
 // ==============================
-// Search button
 searchBtn.addEventListener("click", searchPlayers);
 
-// Enter key on input
 searchInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") searchPlayers();
 });
 
-// Slider input
 limitSlider.addEventListener("input", () => {
   limitValue.textContent = limitSlider.value;
   if (lastResults.length > 0) renderResults(lastResults);
 });
 
-// Sort slider (A–Z / Z–A)
-sortSlider.addEventListener("input", () => {
-  sortLabel.textContent =
-    sortSlider.value === "0" ? "A → Z" : "Z → A";
+sortToggle.addEventListener("click", () => {
+  sortDirection = sortDirection === "asc" ? "desc" : "asc";
+
+  sortToggle.textContent =
+    sortDirection === "asc" ? "A → Z" : "Z → A";
+
+  sortToggle.classList.toggle("active", sortDirection === "desc");
+  sortToggle.setAttribute(
+    "aria-pressed",
+    sortDirection === "desc"
+  );
 
   if (lastResults.length > 0) {
     renderResults(lastResults);
@@ -78,17 +82,20 @@ async function searchPlayers() {
   const query = searchInput.value.trim();
   if (!query) return;
 
-  if (searchQuerySpan) searchQuerySpan.textContent = `"${query}"`;
+  if (searchQuerySpan) {
+    searchQuerySpan.textContent = `"${query}"`;
+  }
 
   // Reset UI
   resultsDiv.innerHTML = "";
   errorDiv.textContent = "";
-
-  // Show loader
+  filterWrapper?.classList.remove("show");
   loader.classList.remove("hidden");
 
   try {
-    const url = `${API_BASE}/mlb/v1/players?search=${encodeURIComponent(query)}&include=team`;
+    const url = `${API_BASE}/mlb/v1/players?search=${encodeURIComponent(
+      query
+    )}&include=team`;
 
     const response = await fetch(url, {
       headers: { Authorization: API_KEY },
@@ -105,6 +112,7 @@ async function searchPlayers() {
     }
 
     lastResults = data.data;
+    filterWrapper?.classList.add("show");
     renderResults(lastResults);
 
   } catch (err) {
@@ -126,19 +134,16 @@ function renderResults(players) {
   const limit = Number(limitSlider.value);
   if (limit === 0) return;
 
-  let sortedPlayers = [...players];
-
-    // Apply A–Z / Z–A sorting
-  sortedPlayers.sort((a, b) => {
+  const sortedPlayers = [...players].sort((a, b) => {
     const nameA = `${a.last_name} ${a.first_name}`.toLowerCase();
     const nameB = `${b.last_name} ${b.first_name}`.toLowerCase();
 
-    return sortSlider.value === "0"
+    return sortDirection === "asc"
       ? nameA.localeCompare(nameB)
       : nameB.localeCompare(nameA);
   });
 
-  sortedPlayers.slice(0, limit).forEach((player) => {
+  sortedPlayers.slice(0, limit).forEach(player => {
     const card = document.createElement("div");
     card.className = "card";
 
@@ -154,13 +159,10 @@ function renderResults(players) {
     resultsDiv.appendChild(card);
   });
 
-  // Trigger fade-in AFTER DOM paint
   requestAnimationFrame(() => {
     resultsDiv.classList.add("show");
   });
 }
-
-
 
 // ==============================
 // INITIAL QUERY FROM URL
@@ -173,7 +175,7 @@ if (initialQuery) {
 }
 
 // ==============================
-// FADE IN / OUT TRANSITIONS
+// PAGE FADE TRANSITIONS
 // ==============================
 window.addEventListener("load", () => {
   document.body.style.opacity = "1";
@@ -190,6 +192,7 @@ document.addEventListener("click", (e) => {
 
     setTimeout(() => {
       window.location.href = href;
-    }, 400); // match CSS transition time
+    }, 400);
   }
 });
+
